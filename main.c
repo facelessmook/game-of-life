@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
+#include "hardware/adc.h"
 #include "OLED.h"
+#include "image.c"
 
 #define ROW_COUNT 128
 #define COL_COUNT   8
@@ -12,9 +14,10 @@ uint8_t new_life[ROW_COUNT][COL_COUNT];
 
 void start_life(uint32_t seed){
     srand(seed);
+    uint16_t result = adc_read();
     for (int i = 0; i < ROW_COUNT; ++i){
         for (int j = 0; j < COL_COUNT; ++j){
-            life[i][j] = rand() % 256;
+            life[i][j] = rand() % (result % 256);
         }
     }
     load_image(life);
@@ -139,12 +142,18 @@ uint32_t calculate_new_seed(){
 int main() {
 
     init_io();
-    gpio_init(25);
+
+    //Button initialisation
     gpio_init(27);
-    gpio_set_dir(25, 1);
-    gpio_set_dir(27, 0);
     gpio_set_input_enabled(27,1);
     gpio_pull_down(27);
+
+    //ADC Initialisation
+    adc_init();
+    adc_gpio_init(26);
+    adc_select_input(0);
+    //adc_run(0);
+
     screen_init();
     
     gpio_put(COB, 1);
@@ -154,8 +163,7 @@ int main() {
         }
     }
     gpio_put(COB, 0);
-
-    start_life(20);
+    start_life(adc_read());
     while (true) {
         sleep_ms(10);
         play_god();
