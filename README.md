@@ -11,5 +11,7 @@ The game of life implementation generates a seed (currently fixed) and then pseu
 
 If a button press is detected on GPIO27 (with 3v3 connected to GPIO27 when button is pressed), a pseudo-random seed is generated to start the game of life again. The pseudo-random seed uses three bytes from the previous generation, which given the large combinations, is practically not-repeatable.
 
+On turning on the MCU, the voltage on pin 26 is sampled and is used to determine the initial seed. It also is used to control the maximum population percentage of generation 0.
+
 Possible improvements - 
-The same seed is always selected on MCU start so starting generation is always the same. A possible solution to this is to perform an analogue-to-digital calculation on a pin when turned on. However, this voltage must be random too and so the question is how can it be? If a random oscillation was on the pin, this may be possible. 
+The same seed is always selected on MCU start so starting generation is always the same. A possible solution to this is to perform an analogue-to-digital calculation on a pin when turned on. However, this voltage must be random too and so the question is how can it be? If a random oscillation was on the pin, this may be possible.
