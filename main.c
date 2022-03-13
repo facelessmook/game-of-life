@@ -4,7 +4,6 @@
 #include "hardware/spi.h"
 #include "hardware/adc.h"
 #include "OLED.h"
-#include "image.c"
 
 #define ROW_COUNT 128
 #define COL_COUNT   8
